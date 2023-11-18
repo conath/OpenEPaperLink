@@ -24,6 +24,7 @@ uint8_t updateCount = 1;
 extern uint8_t __xdata curChannel;
 extern uint8_t __xdata curPendingData;
 extern uint8_t __xdata curNoUpdate;
+extern uint8_t __xdata mSelfMac[8];
 
 #if (SCREEN_WIDTH == 1)
 // Segmented display type
@@ -99,6 +100,18 @@ void epdShowRun() {
     epdPrintBegin(16, 55, EPD_DIRECTION_X, EPD_SIZE_DOUBLE, EPD_COLOR_BLACK);
 #endif
     epdpr("AP Mode");
+    epdPrintEnd();
+
+#if (SCREEN_HEIGHT == 296)
+    epdPrintBegin(56, 100, EPD_DIRECTION_Y, EPD_SIZE_SINGLE, EPD_COLOR_BLACK);
+#else
+    epdPrintBegin(16, 35, EPD_DIRECTION_X, EPD_SIZE_SINGLE, EPD_COLOR_BLACK);
+#endif
+    epdpr(
+        "%d:%d:%d:%d:%d:%d:%d:%d",
+         mSelfMac[0], mSelfMac[1], mSelfMac[2], mSelfMac[3],
+         mSelfMac[4], mSelfMac[5], mSelfMac[6], mSelfMac[7],
+    );
     epdPrintEnd();
     draw();
 }

@@ -170,12 +170,19 @@ bool WifiManager::waitForConnection() {
 
 void WifiManager::startManagementServer() {
     if (!_APstarted) {
-        terminalLog("Starting configuration AP, ssid: OpenEPaperLink");
-        logLine("Starting configuration AP, ssid OpenEPaperLink");
+        char hostname[32] = "OpenEpaperLink-";
+        uint8_t mac[6];
+        esp_read_mac(mac, ESP_MAC_WIFI_STA);
+        char lastTwoBytes[5];
+        sprintf(lastTwoBytes, "%02X%02X", mac[4], mac[5]);
+        strcat(hostname, lastTwoBytes);
+
+        terminalLog("Starting configuration AP, ssid: " + String(hostname));
+        logLine("Starting configuration AP, ssid " + String(hostname));
         WiFi.disconnect(false, true);
         WiFi.mode(WIFI_AP);
-        WiFi.softAP("OpenEPaperLink", "", 1, false);
-        WiFi.softAPsetHostname("OpenEPaperLink");
+        WiFi.softAP(hostname, "", 1, false);
+        WiFi.softAPsetHostname(hostname);
         IPAddress IP = WiFi.softAPIP();
         terminalLog("Connect to it, visit http://" + String(IP.toString().c_str()) + "/setup");
         _APstarted = true;
