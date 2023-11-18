@@ -190,14 +190,14 @@ jobs:
           mkdir jsonfiles
           python genfilelist.py ${{ github.ref_name }} $GITHUB_REPOSITORY $GITHUB_SHA
           
-      - name: Add file lists to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: jsonfiles/*
-          tag: ${{ github.ref }}
-          file_glob: true
-          overwrite: true
+#      - name: Add file lists to release
+#        uses: svenstaro/upload-release-action@v2
+#        with:
+#          repo_token: ${{ secrets.GITHUB_TOKEN }}
+#          file: jsonfiles/*
+#          tag: ${{ github.ref }}
+#          file_glob: true
+#          overwrite: true
         
 #      - name: Add tag bins to release
 #        uses: svenstaro/upload-release-action@v2
@@ -228,14 +228,21 @@ jobs:
           cp S2_Tag_Flasher/firmware.bin espbinaries/S2_Tag_Flasher.bin
           cp S2_Tag_Flasher/merged-firmware.bin espbinaries/S2_Tag_Flasher_full.bin
 
-      - name: Add esp bins to release
-        uses: svenstaro/upload-release-action@v2
+#      - name: Add esp bins to release
+#        uses: svenstaro/upload-release-action@v2
+#        with:
+#          repo_token: ${{ secrets.GITHUB_TOKEN }}
+#          file: espbinaries/*
+#          tag: ${{ github.ref }}
+#          file_glob: true
+#          overwrite: true
+                    
+      - name: GH Release
+        uses: softprops/action-gh-release@v0.1.15
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: espbinaries/*
-          tag: ${{ github.ref }}
-          file_glob: true
-          overwrite: true
+          files: espbinaries/*
+          
           
 #      - name: Add www folder to release
 #        uses: svenstaro/upload-release-action@v2
